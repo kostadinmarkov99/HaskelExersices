@@ -12,7 +12,7 @@ main = do
  print"Revercint the number 567"
  print(reverceNumber 567)
  print "Checking is the number prime 4"
- print(isPrime 567)
+ print(isPrime 5)
  
 {-
   Зад. 1. Да се дефинира функция countDigits, която генерира линейно рекурсивен
@@ -65,4 +65,15 @@ changeTheDig sum n = if(n < 10) then (sum * 10) + n else changeTheDig((sum * 10)
 -}
 
 isPrime :: Integer -> Bool
-isPrime n = 
+isPrime n = (n > 2 && isPrimeHelper n 2)
+
+isPrimeHelper :: Integer -> Integer -> Bool
+isPrimeHelper n k
+ |k^2 > n   = True
+ |mod n k == 0 = False
+ |otherwise = isPrimeHelper n (k + 1)
+
+{-
+  Зад. 7. Да се напише предикат isAscending, който връща истина, ако цифрите на
+  дадено естествено число са в нарастващ ред от първата към последната.
+-}
