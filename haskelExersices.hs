@@ -12,7 +12,15 @@ main = do
  print"Revercint the number 567"
  print(reverceNumber 567)
  print "Checking is the number prime 4"
- print(isPrime 5)
+ print(isPrime 4)
+ print "Are the digits growing order"
+ print (isAscending 456)
+ print "The digit 5 in number 555 is"
+ print (countOccurences 555 5)
+ print "Is the number 28 perfect"
+ print (isPerfectNumber 8128)
+ print "The sum of prime devisors of 8 is"
+ print (sumPrimeDivisors 15)
  
 {-
   Зад. 1. Да се дефинира функция countDigits, която генерира линейно рекурсивен
@@ -65,7 +73,7 @@ changeTheDig sum n = if(n < 10) then (sum * 10) + n else changeTheDig((sum * 10)
 -}
 
 isPrime :: Integer -> Bool
-isPrime n = (n > 2 && isPrimeHelper n 2)
+isPrime n = (n >= 2 && isPrimeHelper n 2)
 
 isPrimeHelper :: Integer -> Integer -> Bool
 isPrimeHelper n k
@@ -77,3 +85,62 @@ isPrimeHelper n k
   Зад. 7. Да се напише предикат isAscending, който връща истина, ако цифрите на
   дадено естествено число са в нарастващ ред от първата към последната.
 -}
+
+isAscending :: Integer -> Bool
+isAscending n 
+ | (isAscendingHelper n 1 0) + 1 == isAscendingHelperCouter n    = True
+ | otherwise = False
+
+isAscendingHelper :: Integer -> Integer -> Integer ->  Integer
+isAscendingHelper n i sum
+ | mod n 10 > (mod (div n 10) 10) && n `div` 100 == 0   = sum + 1
+ | mod n 10 < (mod (div n 10) 10) && n `div` 100 /= 0  = sum
+ | mod n 10 > mod (div n (10 * i)) 10 = isAscendingHelper (n `div` 10) (i + 1) (sum + 1) 
+ | otherwise = isAscendingHelper(n `div` 10) (i + 1) sum + 1
+ 
+isAscendingHelperCouter :: Integer -> Integer 
+isAscendingHelperCouter n = if(n < 10) then 1 else 1 + isAscendingHelperCouter(n `div` 10)
+ 
+ {-
+  Зад. 8. Да се напише функция countOccurences, намираща броя на срещанията на дадена
+  цифра d в записа на число n.
+-}
+
+countOccurences :: Integer -> Integer -> Integer
+countOccurences n dig = if(n < 10 && n == dig) then 1 else countOccurencesHelper n dig 0
+
+countOccurencesHelper :: Integer -> Integer -> Integer -> Integer
+countOccurencesHelper n dig sum 
+ | n < 10 && n /= dig  = sum 
+ | n < 10 && n == dig  = sum + 1
+ | n `mod` 10 == dig   = countOccurencesHelper(n `div` 10) dig sum + 1   
+ | otherwise  =  countOccurencesHelper(n `div` 10) dig sum
+ 
+ {-
+  Зад. 9. Да се напише предикат isPerfectNumber, който връща дали едно число е
+  съвършено, т.е. равно на сумата от делите си.
+-}
+
+isPerfectNumber :: Integer -> Bool
+isPerfectNumber n = isPerfectNumberHelper n 0 1 == n
+ 
+isPerfectNumberHelper :: Integer -> Integer -> Integer -> Integer 
+isPerfectNumberHelper n sum i
+ | n <= i  = sum 
+ | n `mod` i == 0  = isPerfectNumberHelper n (sum + i) (i + 1) 
+ | otherwise = isPerfectNumberHelper n sum (i + 1)
+ 
+ {-
+  Зад. 10. Да се дефинира функция sumPrimeDivisors, която намира сумата на всички
+  прости делители на едно число.
+-}
+
+ 
+sumPrimeDivisors :: Integer -> Integer
+sumPrimeDivisors n = sumPrimeDivisorsHelper n 0 1
+
+sumPrimeDivisorsHelper :: Integer -> Integer -> Integer -> Integer
+sumPrimeDivisorsHelper n sum i
+ | i > n = sum
+ | n `mod` i == 0 && isPrime i  = sumPrimeDivisorsHelper n (sum + i) (i + 1)
+ | otherwise = sumPrimeDivisorsHelper n sum (i + 1)
